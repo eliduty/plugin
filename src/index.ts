@@ -1,6 +1,6 @@
-import { dirname, join, normalize } from "path";
+import { dirname, join } from "path";
 import { promises as fs } from "fs";
-import { normalizePath, type Plugin } from "vite";
+import { type Plugin } from "vite";
 interface Options {
   /**
    * iconfont url
