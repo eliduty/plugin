@@ -1,0 +1,41 @@
+{
+  "name": "vite-plugin-iconfont",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./*": "./*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliduty/vite-plugin-iconfont.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "vite-plugin",
+    "iconfont"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eliduty/vite-plugin-iconfont/issues"
+  },
+  "homepage": "https://github.com/eliduty/vite-plugin-iconfont#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4"
+  }
+}
