@@ -1,6 +1,6 @@
-import { dirname } from "path";
+import { dirname, join, normalize } from "path";
 import { promises as fs } from "fs";
-import type { Plugin } from "vite";
+import { normalizePath, type Plugin } from "vite";
 interface Options {
   /**
    * iconfont url
@@ -21,28 +21,42 @@ interface Options {
 }
 
 export default (options: Options): Plugin => {
-  const dtsPath = options.dts === true ? "./iconfont.d.ts" : options.dts as string;
+  const dtsPath =
+    options.dts === true ? "./iconfont.d.ts" : (options.dts as string);
+  let config;
   return {
     name: "vite-plugin-iconfont",
-    async transformIndexHtml() {
-      const URL_CONTENT = await getURLContent(options.url);
+    configResolved(resolvedConfig) {
+      config = resolvedConfig;
+    },
+    async transformIndexHtml(_) {
+      // console.log(config);
+      const rootPath = config.root;
+      const IS_PRO = config.mode === "production";
+      let url = options.url;
+      console.log(rootPath, IS_PRO);
+      const URL_CONTENT = await getURLContent(url);
       const iconList = URL_CONTENT.match(/(?<=id=").+?(?=")/g) || [];
       if (options.iconFilePath) {
-        writeFile(
-          options.iconFilePath,
-          `["${iconList.join('","')}"]`
-        );
+        writeFile(options.iconFilePath, `["${iconList.join('","')}"]`);
       }
       if (options.dts) {
         const iconDts = `export type Iconfont = "${iconList.join('"|"')}"`;
         writeFile(dtsPath, iconDts);
       }
-      writeFile(options.distFilePath, URL_CONTENT);
+      if (IS_PRO) {
+        const { outDir, assetsDir } = config.build;
+        url = join(config.base, assetsDir, "iconfont.js")
+          .split("\\")
+          .join("/");
+        writeFile(`${outDir}/${url}`, URL_CONTENT);
+      }
+
       return [
         {
           tag: "script",
           injectTo: "head",
-          attrs: { src: options.url },
+          attrs: { src: url },
         },
       ];
     },
