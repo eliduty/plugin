@@ -11,10 +11,6 @@ interface Options {
    */
   dts: boolean | string;
   /**
-   * 自动下载iconfont到本地
-   */
-  distFilePath: string;
-  /**
    * 自动生成iconfont图标集合
    */
   iconFilePath: string;
