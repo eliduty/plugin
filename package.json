@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm",
-    "release": "release-it"
+    "release": "pnpm build && release-it"
   },
   "repository": {
     "type": "git",
