@@ -30,11 +30,8 @@ export default (options: Options): Plugin => {
       config = resolvedConfig;
     },
     async transformIndexHtml(_) {
-      // console.log(config);
-      const rootPath = config.root;
       const IS_PRO = config.mode === "production";
       let url = options.url;
-      console.log(rootPath, IS_PRO);
       const URL_CONTENT = await getURLContent(url);
       const iconList = URL_CONTENT.match(/(?<=id=").+?(?=")/g) || [];
       if (options.iconFilePath) {
