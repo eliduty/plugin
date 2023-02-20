@@ -50,7 +50,6 @@ export default (options: Options): Plugin => {
     },
     async transformIndexHtml() {
       const injectArr: IndexHtmlTransformResult = [];
-      console.log(config.mode,config.mode === "production")
       const IS_DEV = config.mode === "development";
       let url = opt.url;
 
