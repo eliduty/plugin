@@ -1,6 +1,7 @@
 # ⚡vite-plugin-iconfont
 
 [![npm](https://img.shields.io/npm/v/vite-plugin-iconfont)](https://www.npmjs.com/package/vite-plugin-iconfont) [![npm](https://img.shields.io/npm/dt/vite-plugin-iconfont)](https://www.npmjs.com/package/vite-plugin-iconfont)
+
 这是一个自动下载iconfont symbol js到项目的vite 插件，支持以下特性：
 
 - 自动下载iconfont symbol js 到本地，支持构建时自动注入index.html。
