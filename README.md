@@ -5,7 +5,7 @@
 
 - 自动下载iconfont symbol js 到本地，支持构建时自动注入index.html。
 - 自动生成iconfont json配置。
-- 自动生成iconfont类型声明文件。
+- 自动生成iconfont TypeScript类型声明文件。
 
 ## 安装
 
