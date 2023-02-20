@@ -50,7 +50,8 @@ export default (options: Options): Plugin => {
     },
     async transformIndexHtml() {
       const injectArr: IndexHtmlTransformResult = [];
-      const IS_PRO = config.mode === "production";
+      console.log(config.mode,config.mode === "production")
+      const IS_DEV = config.mode === "development";
       let url = opt.url;
 
       const URL_CONTENT = await getURLContent(url);
@@ -67,7 +68,7 @@ export default (options: Options): Plugin => {
       // 生成ts类型声明文件
       if (opt.dts) {
         const dtsPath = options.dts !== true ? options.dts : "iconfont.d.ts";
-        const iconDts = `export type Iconfont = "${iconList.join('"|"')}"`;
+        const iconDts = `declare type Iconfont = "${iconList.join('"|"')}"`;
         writeFile(dtsPath as string, iconDts);
       }
 
@@ -75,7 +76,7 @@ export default (options: Options): Plugin => {
       if (!opt.inject) {
         writeFile(join(process.cwd(), opt.distUrl as string), URL_CONTENT);
       } else {
-        if (IS_PRO) {
+        if (!IS_DEV) {
           const { outDir, assetsDir } = config.build;
           url = join(config.base, assetsDir, opt.distUrl || "")
             .split("\\")
