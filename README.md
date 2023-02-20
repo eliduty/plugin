@@ -26,11 +26,11 @@ pnpm install -D vite-plugin-iconfont
 import { defineConfig } from 'vite';
 import Iconfont from 'vite-plugin-iconfont';
 export default defineConfig({
-  plugins: [Iconfont()]
+  plugins: [Iconfont({ url: '//at.alicdn.com/t/c/font_3303_220hwi541tl8.js'})]
 });
 ```
 
-## 配置选项
+## 配置选项(options)
 
 ### url
 
@@ -84,7 +84,7 @@ export default () => {
     plugins: [
       vue(),
       Iconfont({
-        url: '//at.alicdn.com/t/c/font_3893567_w0hwi541tl8.js',
+        url: '//at.alicdn.com/t/c/font_3303_220hwi541tl8.js',
         distUrl: './public/assets/fonts/iconfont.js',
         iconJson: './public/iconfont.json',
         dts: './types/iconfont.d.ts',
