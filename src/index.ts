@@ -1,6 +1,7 @@
-import { dirname, join } from "path";
-import { promises as fs } from "fs";
+import { dirname, join } from "node:path";
+import { existsSync, promises as fs } from "node:fs";
 import { IndexHtmlTransformResult, type Plugin } from "vite";
+
 interface Options {
   /**
    * iconfont symbol js url
@@ -61,26 +62,26 @@ export default (options: Options): Plugin => {
         const JSON_CONTENT = await getURLContent(url.replace(".js", ".json"));
         const iconJsonPath =
           opt.iconJson !== true ? opt.iconJson : "iconfont.json";
-        writeFile(iconJsonPath, JSON_CONTENT);
+        generateFile(iconJsonPath, JSON_CONTENT);
       }
 
       // 生成ts类型声明文件
       if (opt.dts) {
         const dtsPath = options.dts !== true ? options.dts : "iconfont.d.ts";
         const iconDts = `declare type Iconfont = "${iconList.join('"|"')}"`;
-        writeFile(dtsPath as string, iconDts);
+        generateFile(dtsPath as string, iconDts);
       }
 
       // 自动下载iconfont symbol js
       if (!opt.inject) {
-        writeFile(join(process.cwd(), opt.distUrl as string), URL_CONTENT);
+        generateFile(join(process.cwd(), opt.distUrl as string), URL_CONTENT);
       } else {
         if (!IS_DEV) {
           const { outDir, assetsDir } = config.build;
           url = join(config.base, assetsDir, opt.distUrl || "")
             .split("\\")
             .join("/");
-          writeFile(`${outDir}/${url}`, URL_CONTENT);
+          generateFile(`${outDir}/${url}`, URL_CONTENT);
         }
         injectArr.push({
           tag: "script",
@@ -92,18 +93,53 @@ export default (options: Options): Plugin => {
     },
   };
 };
+
+/**
+ * 获取地址，如果是相对协议地址自动添加https
+ * @param url
+ * @returns
+ */
 function getURL(url) {
   return /http/.test(url) ? url : `https:${url}`;
 }
+
+/**
+ * 判断是否是https地址
+ * @param url
+ * @returns
+ */
 function isHttpsURL(url) {
   return /https/.test(url);
 }
 
+/**
+ * 生成文件
+ * @param path
+ * @param content
+ */
+async function generateFile(filepath, content) {
+  const originalContent = existsSync(filepath)
+    ? await fs.readFile(filepath, "utf-8")
+    : "";
+  originalContent !== content && writeFile(filepath, content);
+}
+
+/**
+ * 写文件
+ * @param filePath
+ * @param content
+ * @returns
+ */
 async function writeFile(filePath: string, content = "") {
   await fs.mkdir(dirname(filePath), { recursive: true });
   return await fs.writeFile(filePath, content, "utf-8");
 }
 
+/**
+ * 获取指定url地址的内容
+ * @param url
+ * @returns
+ */
 async function getURLContent(url): Promise<string> {
   const targetURL = getURL(url);
   let http;
