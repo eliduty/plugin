@@ -4,9 +4,10 @@
 
 这是一个自动下载iconfont symbol js到项目的vite 插件，支持以下特性：
 
-- 自动下载iconfont symbol js 到本地，支持构建时自动注入index.html。
+- 自动下载iconfont symbol js 到本地。
 - 自动生成iconfont json配置。
 - 自动生成iconfont TypeScript类型声明文件。
+- 支持构建时自动注入index.html。
 
 ## 安装
 
@@ -34,7 +35,7 @@ export default defineConfig({
 
 ### url
 
-iconfont使用symbol引用方式，生成的项目js地址，配置后将自动下载文件到本地。
+iconfont使用symbol引用方式，生成的项目js地址，该参数为主要输入参数。
 
 - **Type :** `string`
 - **Default :** ''
@@ -42,7 +43,7 @@ iconfont使用symbol引用方式，生成的项目js地址，配置后将自动�
 
 ### distUrl
 
-iconfont使用symbol引用方式，生成的项目js地址，配置后将自动下载文件到本地。
+保存iconfont到项目的js地址。
 
 - **Type :** `string`
 - **Default :** `iconfont.js`
@@ -58,7 +59,7 @@ iconfont使用symbol引用方式，生成的项目js地址，配置后将自动�
 
 ### inject
 
-iconfont symbol js是否自动注入到`index.html`文件
+iconfont symbol js是否自动注入到`index.html`文件。
 
 - **Type :** `boolean`
 - **Default :** `true`
