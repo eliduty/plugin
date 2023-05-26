@@ -43,14 +43,10 @@ export default (options: Options): Plugin => {
     );
   }
 
-  let config;
+  const injectArr: IndexHtmlTransformResult = [];
   return {
     name: "vite-plugin-iconfont",
-    configResolved(resolvedConfig) {
-      config = resolvedConfig;
-    },
-    async transformIndexHtml() {
-      const injectArr: IndexHtmlTransformResult = [];
+    async configResolved(config) {
       const IS_DEV = config.mode === "development";
       let url = opt.url;
 
@@ -89,8 +85,8 @@ export default (options: Options): Plugin => {
           attrs: { src: url },
         });
       }
-      return injectArr;
     },
+    transformIndexHtml: () => injectArr,
   };
 };
 
