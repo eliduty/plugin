@@ -1,6 +1,8 @@
-import { dirname, join } from "node:path";
-import { existsSync, promises as fs } from "node:fs";
-import { IndexHtmlTransformResult, type Plugin } from "vite";
+/// @1ts-nocheck
+import { dirname, join } from 'node:path';
+import { existsSync, promises as fs } from 'node:fs';
+import { IndexHtmlTransformResult, type Plugin } from 'vite';
+import X2JS from 'x2js';
 
 interface Options {
   /**
@@ -23,31 +25,48 @@ interface Options {
    * 自动生成iconfont图标集合
    */
   iconJson?: boolean | string;
+  /**
+   * 图标前缀
+   */
+  prefix?: string;
+  /**
+   * iconifyjson文件生成的路径
+   */
+  iconifyFile?: string;
+  /**
+   * 图标大小，一般不需要修改，注意是viewBox，默认是1024
+   */
+  size?: number;
+  /**
+   * 图标前缀中的分隔符，如prefix为icon-，可设置prefixDelimiter为-，默认为-
+   */
+  prefixDelimiter?: string
 }
 
 export default (options: Options): Plugin => {
   const opt: Options = Object.assign(
     {
-      url: "",
-      distUrl: "iconfont.js",
+      url: '',
+      distUrl: 'iconfont.js',
       inject: true,
       dts: false,
       iconJson: false,
+      prefix: 'iconfont',
+      size: 1024,
+      prefixDelimiter: '-'
     },
     options
   );
 
   if (!opt.url) {
-    throw new Error(
-      `【vite-plugin-iconfont】 options url parameter is required`
-    );
+    throw new Error(`【vite-plugin-iconfont】 options url parameter is required`);
   }
 
   const injectArr: IndexHtmlTransformResult = [];
   return {
-    name: "vite-plugin-iconfont",
+    name: 'vite-plugin-iconfont',
     async configResolved(config) {
-      const IS_DEV = config.mode === "development";
+      const IS_DEV = config.mode === 'development';
       let url = opt.url;
 
       const URL_CONTENT = await getURLContent(url);
@@ -55,38 +74,50 @@ export default (options: Options): Plugin => {
 
       // 生成下载图标配置
       if (opt.iconJson) {
-        const JSON_CONTENT = await getURLContent(url.replace(".js", ".json"));
-        const iconJsonPath =
-          opt.iconJson !== true ? opt.iconJson : "iconfont.json";
+        const JSON_CONTENT = await getURLContent(url.replace('.js', '.json'));
+        const iconJsonPath = opt.iconJson !== true ? opt.iconJson : 'iconfont.json';
         generateFile(iconJsonPath, JSON_CONTENT);
       }
 
       // 生成ts类型声明文件
       if (opt.dts) {
-        const dtsPath = options.dts !== true ? options.dts : "iconfont.d.ts";
+        const dtsPath = options.dts !== true ? options.dts : 'iconfont.d.ts';
         const iconDts = `declare type Iconfont = "${iconList.join('"|"')}"`;
         generateFile(dtsPath as string, iconDts);
       }
-
+      // 生成iconify.json
+      if (opt.iconifyFile) {
+        const parser = new X2JS();
+        const iconXML = URL_CONTENT.match(/<svg>.*<\/svg>/i) + '';
+        const iconfontObj:any = parser.xml2js(iconXML) || {};
+        const iconfontSymbols = iconfontObj?.svg?.symbol || [];
+        const iconifyJson = createIconifyJson(iconfontSymbols, opt.prefix!,opt.prefixDelimiter, opt.size);
+        try {
+          const iconifyJsonString = JSON.stringify(iconifyJson);
+          generateFile(opt.iconifyFile, iconifyJsonString);
+        } catch (error) {
+          console.log('create IconifyJson error!');
+        }
+      }
       // 自动下载iconfont symbol js
       if (!opt.inject) {
         generateFile(join(process.cwd(), opt.distUrl as string), URL_CONTENT);
       } else {
         if (!IS_DEV) {
           const { outDir, assetsDir } = config.build;
-          url = join(config.base, assetsDir, opt.distUrl || "")
-            .split("\\")
-            .join("/");
+          url = join(config.base, assetsDir, opt.distUrl || '')
+            .split('\\')
+            .join('/');
           generateFile(`${outDir}/${url}`, URL_CONTENT);
         }
         injectArr.push({
-          tag: "script",
-          injectTo: "head",
-          attrs: { src: url },
+          tag: 'script',
+          injectTo: 'head',
+          attrs: { src: url }
         });
       }
     },
-    transformIndexHtml: () => injectArr,
+    transformIndexHtml: () => injectArr
   };
 };
 
@@ -114,9 +145,7 @@ function isHttpsURL(url) {
  * @param content
  */
 async function generateFile(filepath, content) {
-  const originalContent = existsSync(filepath)
-    ? await fs.readFile(filepath, "utf-8")
-    : "";
+  const originalContent = existsSync(filepath) ? await fs.readFile(filepath, 'utf-8') : '';
   originalContent !== content && writeFile(filepath, content);
 }
 
@@ -126,9 +155,9 @@ async function generateFile(filepath, content) {
  * @param content
  * @returns
  */
-async function writeFile(filePath: string, content = "") {
+async function writeFile(filePath: string, content = '') {
   await fs.mkdir(dirname(filePath), { recursive: true });
-  return await fs.writeFile(filePath, content, "utf-8");
+  return await fs.writeFile(filePath, content, 'utf-8');
 }
 
 /**
@@ -140,19 +169,71 @@ async function getURLContent(url): Promise<string> {
   const targetURL = getURL(url);
   let http;
   try {
-    http = isHttpsURL(targetURL) ? await import("https") : await import("http");
+    http = isHttpsURL(targetURL) ? await import('https') : await import('http');
   } catch (err) {
-    console.log("https support is disabled!");
+    console.log('https support is disabled!');
   }
   return new Promise((resolve, reject) => {
     http
       .get(targetURL, (res) => {
-        let data = "";
-        res.on("data", (chunk) => (data += chunk.toString()));
-        res.on("end", () => resolve(data));
+        let data = '';
+        res.on('data', (chunk) => (data += chunk.toString()));
+        res.on('end', () => resolve(data));
       })
-      .on("error", (err) => {
+      .on('error', (err) => {
         reject(err);
       });
   });
+}
+type Path = {
+  _d: string
+}
+type IconfontSymbol = {
+  _id: string;
+  path: Path | Path[]
+}
+type IconItem = {
+  body:string
+}
+/**
+ * 生成icon图标内容
+ * @param iconPathJson
+ * @param prefix
+ */
+function createIconifyItem(iconPathJson: IconfontSymbol, prefix: string) {
+  const reg = new RegExp(`^${prefix}`, 'i');
+  const name = iconPathJson._id.replace(reg, '');
+  const path = Array.isArray(iconPathJson?.path) ? iconPathJson?.path : [iconPathJson?.path];
+  const body = path.reduce((temp, item) => {
+    temp += `<path d="${item._d}" fill="currentColor"/>`;
+    return temp;
+  }, '');
+  return {
+    name,
+    body
+  };
+}
+/**
+ * 生成iconifyJSON
+ * @param iconfontSymbols
+ * @param prefix
+ * @param prefixDelimiter
+ * @param size
+ */
+function createIconifyJson(iconfontSymbols: IconfontSymbol[], prefix: string,prefixDelimiter='-', size = 1024) {
+  const icons = iconfontSymbols.reduce((temp, item) => {
+    const iconify = createIconifyItem(item, prefix);
+    temp[iconify.name] = {
+      body: iconify.body
+    };
+    return temp;
+  }, {} as Record<string, IconItem>);
+  const reg = new RegExp(`${prefixDelimiter}$`, 'i');
+  const newPrefix = prefix.replace(reg, '')
+  return {
+    prefix: newPrefix,
+    icons,
+    width: size,
+    height: size
+  };
 }
