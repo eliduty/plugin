@@ -8,7 +8,7 @@
 - 自动生成iconfont json配置。
 - 自动生成iconfont TypeScript类型声明文件。
 - 支持构建时自动注入index.html。
-- 支持生产iconify文件，配合[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)可实现图标预览
+- 支持生成iconify文件，配合[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)可实现图标预览和自动补全
 
 ## 安装
 
@@ -147,6 +147,7 @@ export default () => {
 
 ```
 ## 使用iconify
+如果使用[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)，可以不生产dts，也可使用自动补全，还可以实时预览，使用方法如下：
 1. 设置对应参数，如：
 ```js
 Iconfont({
@@ -165,4 +166,5 @@ Iconfont({
 }
 ```
 4. 重启或者重载一下编辑器窗口（cmd+shift+p，然后Reload window）即可成功预览图标，效果如下。
-![](./img/iconify.png)
+![预览](./img/iconify_preview.png)
+![自动补全](./img/iconify_completion.png)
