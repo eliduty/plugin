@@ -10,7 +10,7 @@ import IconFont from './components/IconFont/index.vue';
 
     <div class="wrapper">
       <HelloWorld msg="You did it!"  />
-      <IconFont type="accountbook-fill"></IconFont>
+      <IconFont type="iconfont-icon-border-inner"></IconFont>
     </div>
   </header>
   <main>
