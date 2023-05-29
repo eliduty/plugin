@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-iconfont",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "This plugin is for auto download iconfont symbol js file",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -49,17 +49,17 @@
     "rimraf": "^4.1.2"
   },
   "contributors": [
-		{
-			"name": "eliduty",
-			"email": "eliduty@qq.com",
-			"url": "https://github.com/eliduty"
-		},
     {
-			"name": "BWrong",
-			"email": "ibwrong@foxmail.com",
-			"url": "https://github.com/BWrong"
-		}
-	],
+      "name": "eliduty",
+      "email": "eliduty@qq.com",
+      "url": "https://github.com/eliduty"
+    },
+    {
+      "name": "BWrong",
+      "email": "ibwrong@foxmail.com",
+      "url": "https://github.com/BWrong"
+    }
+  ],
   "release-it": {
     "git": {
       "commitMessage": "chore: release v${version}",
