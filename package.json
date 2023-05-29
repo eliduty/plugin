@@ -37,6 +37,10 @@
     "url": "https://github.com/eliduty/vite-plugin-iconfont/issues"
   },
   "homepage": "https://github.com/eliduty/vite-plugin-iconfont#readme",
+
+  "dependencies": {
+    "x2js": "^3.4.4"
+  },
   "devDependencies": {
     "@types/node": "^18.11.18",
     "release-it": "^15.6.0",
