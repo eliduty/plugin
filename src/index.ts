@@ -27,9 +27,13 @@ interface Options {
   iconJson?: boolean | string;
 
   /**
-   * 图标前缀
+   * 图标前缀, 默认icon
    */
   prefix?: string;
+  /**
+   * 图标前缀中的分隔符，默认为-
+   */
+  prefixDelimiter?: string
   /**
    * iconifyjson文件生成的路径
    */
@@ -38,10 +42,6 @@ interface Options {
    * 图标大小，一般不需要修改，注意是viewBox，默认是1024
    */
   size?: number;
-  /**
-   * 图标前缀中的分隔符，如prefix为icon-，可设置prefixDelimiter为-，默认为-
-   */
-  prefixDelimiter?: string
 }
 
 export default (options: Options): Plugin => {
@@ -52,9 +52,9 @@ export default (options: Options): Plugin => {
       inject: true,
       dts: false,
       iconJson: false,
-      prefix: 'iconfont',
-      size: 1024,
-      prefixDelimiter: '-'
+      prefix: 'icon',
+      prefixDelimiter: '-',
+      size: 1024
     },
     options
   );
@@ -202,8 +202,8 @@ type IconItem = {
  * @param iconPathJson
  * @param prefix
  */
-function createIconifyItem(iconPathJson: IconfontSymbol, prefix: string) {
-  const reg = new RegExp(`^${prefix}`, 'i');
+function createIconifyItem(iconPathJson: IconfontSymbol, prefix: string, prefixDelimiter:string) {
+  const reg = new RegExp(`^${prefix}${prefixDelimiter}`, 'i');
   const name = iconPathJson._id.replace(reg, '');
   const path = Array.isArray(iconPathJson?.path) ? iconPathJson?.path : [iconPathJson?.path];
   const body = path.reduce((temp, item) => {
@@ -224,16 +224,14 @@ function createIconifyItem(iconPathJson: IconfontSymbol, prefix: string) {
  */
 function createIconifyJson(iconfontSymbols: IconfontSymbol[], prefix: string,prefixDelimiter='-', size = 1024) {
   const icons = iconfontSymbols.reduce((temp, item) => {
-    const iconify = createIconifyItem(item, prefix);
+    const iconify = createIconifyItem(item, prefix,prefixDelimiter);
     temp[iconify.name] = {
       body: iconify.body
     };
     return temp;
   }, {} as Record<string, IconItem>);
-  const reg = new RegExp(`${prefixDelimiter}$`, 'i');
-  const newPrefix = prefix.replace(reg, '')
   return {
-    prefix: newPrefix,
+    prefix,
     icons,
     width: size,
     height: size

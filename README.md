@@ -91,10 +91,20 @@ iconfont symbol js是否自动注入到`index.html`文件。
 
 ### prefix
 
-图标前缀，iconfont默认为`icon-`
+图标前缀，iconfont默认为`icon`。
+
+**注意：和iconfont设置的前缀不一样，如果iconfnt上设置的前缀为icon-，则需要设置prefix为icon，prefixDelimiter为-。即：`iconfont前缀 = prefix + prefixDelimiter`**
 
 - **Type :** `string`
-- **Default :** `icon-`
+- **Default :** `icon`
+- **Required :**`false`
+
+### prefixDelimiter
+
+图标前缀中的分隔符，默认为-
+
+- **Type :** `string`
+- **Default :** `-`
 - **Required :**`false`
 
 ### iconifyFile
@@ -107,19 +117,12 @@ iconifyjson文件生成的路径，不设置则不生成。
 
 ### size
 
-图标大小，一般不需要修改，注意是viewBox，iconfont默认是1024
+图标大小，默认是1024，注意不是实际显示的大小，而是viewBox的，现在iconfont默认是1024，所以不需要设置，使用默认值就行，请谨慎修改。
 
 - **Type :** `number`
 - **Default :** `1024`
 - **Required :**`false`
 
-### prefixDelimiter
-
-图标前缀中的分隔符，如prefix为icon-，可设置prefixDelimiter为-，默认为-
-
-- **Type :** `string`
-- **Default :** `-`
-- **Required :**`false`
 
 ## 示例
 
