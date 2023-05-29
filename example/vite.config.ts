@@ -22,7 +22,7 @@ export default () => {
         // iconJson: "./src/components/IconPicker/data.json",
         // inject: false,
         // dts: "./types/iconfont.d.ts",
-        iconifyFile: "./.iconify.json",
+        iconifyFile: "../.vscode/.iconify.json",
       }),
     ],
   });
