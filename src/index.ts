@@ -25,6 +25,7 @@ interface Options {
    * 自动生成iconfont图标集合
    */
   iconJson?: boolean | string;
+
   /**
    * 图标前缀
    */
@@ -185,6 +186,7 @@ async function getURLContent(url): Promise<string> {
       });
   });
 }
+
 type Path = {
   _d: string
 }

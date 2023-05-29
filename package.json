@@ -37,7 +37,6 @@
     "url": "https://github.com/eliduty/vite-plugin-iconfont/issues"
   },
   "homepage": "https://github.com/eliduty/vite-plugin-iconfont#readme",
-
   "dependencies": {
     "x2js": "^3.4.4"
   },
@@ -49,6 +48,18 @@
     "vite": "^4.0.4",
     "rimraf": "^4.1.2"
   },
+  "contributors": [
+		{
+			"name": "eliduty",
+			"email": "eliduty@qq.com",
+			"url": "https://github.com/eliduty"
+		},
+    {
+			"name": "BWrong",
+			"email": "ibwrong@foxmail.com",
+			"url": "https://github.com/BWrong"
+		}
+	],
   "release-it": {
     "git": {
       "commitMessage": "chore: release v${version}",
