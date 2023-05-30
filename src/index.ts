@@ -69,9 +69,9 @@ export default (options: Options): Plugin => {
     name: "vite-plugin-iconfont",
     async configResolved(config) {
       const IS_DEV = config.mode === "development";
-      const JS_URL = opt.url;
+      let JS_URL = opt.url;
       const JSON_URL = JS_URL.replace(".js", ".json");
-      let [JS_CONTENT, JSON_CONTENT] = await getUrlsContent([JS_URL, JSON_URL]);
+      const [JS_CONTENT, JSON_CONTENT] = await getUrlsContent([JS_URL, JSON_URL]);
 
       // 生成下载图标配置
       if (opt.iconJson) {
@@ -112,7 +112,7 @@ export default (options: Options): Plugin => {
       } else {
         if (!IS_DEV) {
           const { outDir, assetsDir } = config.build;
-          JS_CONTENT = join(config.base, assetsDir, opt.distUrl || "")
+          JS_URL = join(config.base, assetsDir, opt.distUrl || "")
             .split("\\")
             .join("/");
           generateFile(`${outDir}/${JS_CONTENT}`, JS_CONTENT);
@@ -120,7 +120,7 @@ export default (options: Options): Plugin => {
         injectArr.push({
           tag: "script",
           injectTo: "head",
-          attrs: { src: JS_CONTENT },
+          attrs: { src: JS_URL },
         });
       }
     },

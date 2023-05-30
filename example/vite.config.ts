@@ -20,7 +20,7 @@ export default () => {
         url: "//at.alicdn.com/t/c/font_2406373_y1qirr71rlo.js",
         distUrl: "./public/iconfont/iconfont.js",
         iconJson: "./src/components/IconPicker/data.json",
-        inject: false,
+        // inject: false,
         dts: "./types/iconfont.d.ts",
         iconifyFile: "../.vscode/.iconify.json",
       }),
