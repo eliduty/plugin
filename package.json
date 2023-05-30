@@ -27,7 +27,8 @@
   ],
   "keywords": [
     "vite-plugin",
-    "iconfont"
+    "iconfont",
+    "iconify"
   ],
   "author": {
     "name": "eliduty",
