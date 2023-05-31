@@ -127,8 +127,10 @@ export default async (options: Options): Promise<Plugin> => {
     },
     transformIndexHtml: () =>  injectArr,
     generateBundle: () => {
-      const { outDir } = config.build;
-      generateFile(join(outDir, JS_URL).split("\\").join("/"), JS_CONTENT);
+      if (opt.inject) {
+        const { outDir } = config.build;
+        generateFile(join(outDir, JS_URL).split("\\").join("/"), JS_CONTENT);
+      }
     },
   };
 };
