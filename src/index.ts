@@ -2,7 +2,7 @@
 import { dirname, join } from "node:path";
 import { existsSync, promises as fs } from "node:fs";
 import { parse } from "node:url";
-import { IndexHtmlTransformResult, type Plugin } from "vite";
+import { type IndexHtmlTransformResult, type Plugin } from "vite";
 import X2JS from "x2js";
 
 // iconfont使用的是相对协议，如果没有指定协议默认使用https
@@ -44,7 +44,7 @@ interface Options {
   iconifyFile?: string;
 }
 
-export default (options: Options): Plugin => {
+export default async (options: Options): Promise<Plugin> => {
   const opt: Options = Object.assign(
     {
       url: "",
@@ -53,7 +53,7 @@ export default (options: Options): Plugin => {
       dts: false,
       iconJson: false,
       prefix: "icon",
-      prefixDelimiter: "-"
+      prefixDelimiter: "-",
     },
     options
   );
@@ -63,15 +63,17 @@ export default (options: Options): Plugin => {
       `【vite-plugin-iconfont】 options url parameter is required`
     );
   }
+  let JS_URL = opt.url;
+  const JSON_URL = JS_URL.replace(".js", ".json");
+  const [JS_CONTENT, JSON_CONTENT] = await getUrlsContent([JS_URL, JSON_URL]);
 
   const injectArr: IndexHtmlTransformResult = [];
+  let config;
   return {
     name: "vite-plugin-iconfont",
-    async configResolved(config) {
+    async configResolved(resolvedConfig) {
+      config = resolvedConfig;
       const IS_DEV = config.mode === "development";
-      let JS_URL = opt.url;
-      const JSON_URL = JS_URL.replace(".js", ".json");
-      const [JS_CONTENT, JSON_CONTENT] = await getUrlsContent([JS_URL, JSON_URL]);
 
       // 生成下载图标配置
       if (opt.iconJson) {
@@ -97,7 +99,7 @@ export default (options: Options): Plugin => {
         const iconifyJson = createIconifyJson(
           iconfontSymbols,
           opt.prefix!,
-          opt.prefixDelimiter,
+          opt.prefixDelimiter
         );
         try {
           const iconifyJsonString = JSON.stringify(iconifyJson);
@@ -111,11 +113,10 @@ export default (options: Options): Plugin => {
         generateFile(join(process.cwd(), opt.distUrl as string), JS_CONTENT);
       } else {
         if (!IS_DEV) {
-          const { outDir, assetsDir } = config.build;
+          const { assetsDir } = config.build;
           JS_URL = join(config.base, assetsDir, opt.distUrl || "")
             .split("\\")
             .join("/");
-          generateFile(`${outDir}/${JS_URL}`, JS_CONTENT);
         }
         injectArr.push({
           tag: "script",
@@ -124,7 +125,11 @@ export default (options: Options): Plugin => {
         });
       }
     },
-    transformIndexHtml: () => injectArr,
+    transformIndexHtml: () =>  injectArr,
+    generateBundle: () => {
+      const { outDir } = config.build;
+      generateFile(join(outDir, JS_URL).split("\\").join("/"), JS_CONTENT);
+    },
   };
 };
 
@@ -274,7 +279,7 @@ function createIconifyItem(
 function createIconifyJson(
   iconfontSymbols: IconfontSymbol[],
   prefix: string,
-  prefixDelimiter = "-",
+  prefixDelimiter = "-"
 ) {
   const icons = iconfontSymbols.reduce((temp, item) => {
     const iconify = createIconifyItem(item, prefix, prefixDelimiter);

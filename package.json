@@ -15,6 +15,7 @@
   },
   "scripts": {
     "prebuild": "rimraf dist/*",
+    "dev": "pnpm build --watch src",
     "build": "tsup src/index.ts --dts --format cjs,esm",
     "release": "release-it"
   },
