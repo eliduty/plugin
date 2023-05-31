@@ -115,7 +115,7 @@ export default (options: Options): Plugin => {
           JS_URL = join(config.base, assetsDir, opt.distUrl || "")
             .split("\\")
             .join("/");
-          generateFile(`${outDir}/${JS_CONTENT}`, JS_CONTENT);
+          generateFile(`${outDir}/${JS_URL}`, JS_CONTENT);
         }
         injectArr.push({
           tag: "script",
