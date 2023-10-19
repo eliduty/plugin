@@ -52,18 +52,20 @@
     "dev": "pnpm build --watch src",
     "example:build": "pnpm -C example build",
     "example:dev": "pnpm -C example dev",
-    "release": "release-it"
+    "release": "release-it",
+    "taze": "taze minor -Ir"
   },
   "dependencies": {
     "x2js": "^3.4.4"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18",
-    "release-it": "^15.6.0",
-    "rimraf": "^4.1.2",
-    "tsup": "^6.5.0",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4"
+    "@types/node": "^20.8.7",
+    "release-it": "^16.2.1",
+    "rimraf": "^5.0.5",
+    "taze": "^0.11.4",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
   },
   "release-it": {
     "git": {
