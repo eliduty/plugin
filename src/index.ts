@@ -8,7 +8,7 @@ import X2JS from "x2js";
 // iconfont使用的是相对协议，如果没有指定协议默认使用https
 const DEFAULT_PROTOCOL = "https";
 
-interface Options {
+interface Option {
   /**
    * iconfont symbol js url
    */
@@ -44,95 +44,120 @@ interface Options {
   iconifyFile?: string;
 }
 
-export default async (options: Options): Promise<Plugin> => {
-  const opt: Options = Object.assign(
-    {
-      url: "",
-      distUrl: "iconfont.js",
-      inject: true,
-      dts: false,
-      iconJson: false,
-      prefix: "icon",
-      prefixDelimiter: "-",
-    },
-    options
-  );
+const defaultOptions = {
+  url: "",
+  distUrl: "iconfont.js",
+  inject: true,
+  dts: false,
+  iconJson: false,
+  prefix: "icon",
+  prefixDelimiter: "-",
+}
 
-  if (!opt.url) {
-    throw new Error(`【vite-plugin-iconfont】 options url parameter is required`);
-  }
-  let JS_URL = opt.url;
-  const JSON_URL = JS_URL.replace(".js", ".json");
-  let [JS_CONTENT, JSON_CONTENT] = await getUrlsContent([JS_URL, JSON_URL]);
 
-  const injectArr: IndexHtmlTransformResult = [];
-  const iconList = JS_CONTENT.match(/(?<=id=").+?(?=")/g) ?? [];
-  let packIconList: string[] = [];
-  let config;
-  return {
-    name: "vite-plugin-iconfont",
-    async configResolved(resolvedConfig) {
-      config = resolvedConfig;
-      const IS_DEV = config.mode === "development";
-      // 生成下载图标配置
-      if (opt.iconJson) {
-        const iconJsonPath = opt.iconJson !== true ? opt.iconJson : "iconfont.json";
-        generateFile(iconJsonPath, JSON_CONTENT);
-      }
+export default async (option: Option | Option[]): Promise<Plugin> => {
+  const opt= merge(option);
 
-      // 生成ts类型声明文件
-      if (opt.dts) {
-        const dtsPath = opt.dts !== true ? opt.dts : "iconfont.d.ts";
-        const iconDts = `declare type Iconfont = "${iconList.join('"|"')}"`;
-        generateFile(dtsPath as string, iconDts);
-      }
+  console.log(opt)
 
-      // 生成iconify.json
-      if (opt.iconifyFile) {
-        const parser = new X2JS();
-        const iconXML = JS_CONTENT.match(/<svg>.*<\/svg>/i) + "";
-        const iconfontObj: any = parser.xml2js(iconXML) || {};
-        const iconfontSymbols = iconfontObj?.svg?.symbol || [];
-        const iconifyJson = createIconifyJson(iconfontSymbols, opt.prefix!, opt.prefixDelimiter);
-        try {
-          const iconifyJsonString = JSON.stringify(iconifyJson);
-          generateFile(opt.iconifyFile, iconifyJsonString);
-        } catch (error) {
-          console.log("create IconifyJson error!");
-        }
-      }
-      // 自动下载iconfont symbol js
-      if (!opt.inject) {
-        generateFile(join(process.cwd(), opt.distUrl as string), JS_CONTENT);
-      } else {
-        if (!IS_DEV) {
-          const { assetsDir } = config.build;
-          JS_URL = join(config.base, assetsDir, opt.distUrl || "")
-            .split("\\")
-            .join("/");
-        }
-        injectArr.push({
-          tag: "script",
-          injectTo: "head",
-          attrs: { src: JS_URL },
-        });
-      }
-    },
-    transformIndexHtml: () => injectArr,
-    transform: (code) => {
-      // 收集需要打包的icon
-      iconList.forEach((item) => code.includes(item) && packIconList.push(item));
-    },
-    generateBundle: () => {
-      if (opt.inject) {
-        const { outDir } = config.build;
-        // 匹配使用的到icon
-        JS_CONTENT = treeSharkingIcon(JS_CONTENT, packIconList);
-        generateFile(join(outDir, JS_URL).split("\\").join("/"), JS_CONTENT);
-      }
-    },
-  };
+
+
+
+
+
+  // if (!opt.url) {
+  //   throw new Error(`【vite-plugin-iconfont】 options url parameter is required`);
+  // }
+  // let JS_URL = opt.url;
+  // const JSON_URL = JS_URL.replace(".js", ".json");
+  // let [JS_CONTENT, JSON_CONTENT] = await getUrlsContent([JS_URL, JSON_URL]);
+
+  // const injectArr: IndexHtmlTransformResult = [];
+  // const iconList = JS_CONTENT.match(/(?<=id=").+?(?=")/g) ?? [];
+  // let packIconList: string[] = [];
+  // let config;
+  // return {
+  //   name: "vite-plugin-iconfont",
+  //   // async configResolved(resolvedConfig) {
+  //   //   config = resolvedConfig;
+  //   //   const IS_DEV = config.mode === "development";
+  //   //   // 生成下载图标配置
+  //   //   if (opt.iconJson) {
+  //   //     const iconJsonPath = opt.iconJson !== true ? opt.iconJson : "iconfont.json";
+  //   //     generateFile(iconJsonPath, JSON_CONTENT);
+  //   //   }
+
+  //   //   // 生成ts类型声明文件
+  //   //   if (opt.dts) {
+  //   //     const dtsPath = opt.dts !== true ? opt.dts : "iconfont.d.ts";
+  //   //     const iconDts = `declare type Iconfont = "${iconList.join('"|"')}"`;
+  //   //     generateFile(dtsPath as string, iconDts);
+  //   //   }
+
+  //   //   // 生成iconify.json
+  //   //   if (opt.iconifyFile) {
+  //   //     const parser = new X2JS();
+  //   //     const iconXML = JS_CONTENT.match(/<svg>.*<\/svg>/i) + "";
+  //   //     const iconfontObj: any = parser.xml2js(iconXML) || {};
+  //   //     const iconfontSymbols = iconfontObj?.svg?.symbol || [];
+  //   //     const iconifyJson = createIconifyJson(iconfontSymbols, opt.prefix!, opt.prefixDelimiter);
+  //   //     try {
+  //   //       const iconifyJsonString = JSON.stringify(iconifyJson);
+  //   //       generateFile(opt.iconifyFile, iconifyJsonString);
+  //   //     } catch (error) {
+  //   //       console.log("create IconifyJson error!");
+  //   //     }
+  //   //   }
+  //   //   // 自动下载iconfont symbol js
+  //   //   if (!opt.inject) {
+  //   //     generateFile(join(process.cwd(), opt.distUrl as string), JS_CONTENT);
+  //   //   } else {
+  //   //     if (!IS_DEV) {
+  //   //       const { assetsDir } = config.build;
+  //   //       JS_URL = join(config.base, assetsDir, opt.distUrl || "")
+  //   //         .split("\\")
+  //   //         .join("/");
+  //   //     }
+  //   //     injectArr.push({
+  //   //       tag: "script",
+  //   //       injectTo: "head",
+  //   //       attrs: { src: JS_URL },
+  //   //     });
+  //   //   }
+  //   // },
+  //   // transformIndexHtml: () => injectArr,
+  //   // transform: (code) => {
+  //   //   // 收集需要打包的icon
+  //   //   iconList.forEach((item) => code.includes(item) && packIconList.push(item));
+  //   // },
+  //   // generateBundle: () => {
+  //   //   if (opt.inject) {
+  //   //     const { outDir } = config.build;
+  //   //     // 匹配使用的到icon
+  //   //     JS_CONTENT = treeSharkingIcon(JS_CONTENT, packIconList);
+  //   //     generateFile(join(outDir, JS_URL).split("\\").join("/"), JS_CONTENT);
+  //   //   }
+  //   // },
+  // };
 };
+
+/**
+ * 合并参数配置
+ * @param options
+ */
+function merge(option: Option | Option[]) {
+  const type = typeOf(option);
+  if (!["Object", "Array"].includes(type)) {
+    throw new Error(`【vite-plugin-iconfont】 unsupported parameter type`);
+  }
+  const optionList = Array.isArray(option) ? option : [option];
+
+  return optionList.map(item => ({...defaultOptions, ...item}))
+}
+
+function typeOf(value: unknown) {
+  return Object.prototype.toString.call(value).slice(8, -1);
+}
 
 /**
  * 获取地址，如果是相对协议地址自动添加https

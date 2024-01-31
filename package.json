@@ -1,12 +1,7 @@
 {
-  "name": "vite-plugin-iconfont",
+  "name": "@eliduty/plugin",
   "version": "1.2.4",
-  "description": "This plugin is for auto download iconfont symbol js file",
-  "keywords": [
-    "vite-plugin",
-    "iconfont",
-    "iconify"
-  ],
+  "description": "插件库",
   "homepage": "https://github.com/eliduty/vite-plugin-iconfont#readme",
   "bugs": {
     "url": "https://github.com/eliduty/vite-plugin-iconfont/issues"
@@ -56,6 +51,7 @@
     "taze": "taze minor -Ir"
   },
   "dependencies": {
+    "@eliduty/type": "^1.0.3",
     "x2js": "^3.4.4"
   },
   "devDependencies": {

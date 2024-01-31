@@ -1,0 +1,84 @@
+{
+  "name": "vite-plugin-iconfont",
+  "version": "1.2.4",
+  "description": "This plugin is for auto download iconfont symbol js file",
+  "keywords": [
+    "vite-plugin",
+    "iconfont",
+    "iconify"
+  ],
+  "homepage": "https://github.com/eliduty/vite-plugin-iconfont#readme",
+  "bugs": {
+    "url": "https://github.com/eliduty/vite-plugin-iconfont/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliduty/vite-plugin-iconfont.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "eliduty",
+    "email": "eliduty@qq.com"
+  },
+  "contributors": [
+    {
+      "name": "eliduty",
+      "email": "eliduty@qq.com",
+      "url": "https://github.com/eliduty"
+    },
+    {
+      "name": "BWrong",
+      "email": "ibwrong@foxmail.com",
+      "url": "https://github.com/BWrong"
+    }
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf dist/*",
+    "build": "tsup src/index.ts --dts --format cjs,esm",
+    "dev": "pnpm build --watch src",
+    "example:build": "pnpm -C example build",
+    "example:dev": "pnpm -C example dev",
+    "release": "release-it",
+    "taze": "taze minor -Ir"
+  },
+  "dependencies": {
+    "@eliduty/type": "^1.0.3",
+    "x2js": "^3.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "release-it": "^16.2.1",
+    "rimraf": "^5.0.5",
+    "taze": "^0.11.4",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release vite-plugin-iconfont v${version}",
+      "tag":false,
+      "requireCleanWorkingDir": false
+    },
+    "github": {
+      "release": false
+    },
+    "hooks": {
+      "before:init": "pnpm build"
+    }
+  }
+}
