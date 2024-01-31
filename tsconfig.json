@@ -1,18 +1,12 @@
 {
+  "extends": ["@eliduty/tsconfig"],
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "noImplicitAny": false,
-    "lib": ["esnext", "dom"],
-    "types": [
-      "@types/node"
-    ]
+    "baseUrl": "./",
+    "paths": {
+      "@/*":["./*"],
+      "vite-plugin-iconfont": ["./packages/vite-plugin-iconfont/src/index.ts"],
+    }
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["**/dist/**", "**/node_modules/**"],
+  "include": ["**/src/**/*.ts", "**/src/**/*.d.ts", "**/src/**/*.tsx", "**/src/**/*.vue","types/*.d.ts","mocks/**/*.ts","**/tests/**/*.ts"],
 }

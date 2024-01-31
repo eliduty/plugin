@@ -2,13 +2,13 @@
   "name": "@eliduty/plugin",
   "version": "1.2.4",
   "description": "插件库",
-  "homepage": "https://github.com/eliduty/vite-plugin-iconfont#readme",
+  "homepage": "https://github.com/eliduty/plugin#readme",
   "bugs": {
-    "url": "https://github.com/eliduty/vite-plugin-iconfont/issues"
+    "url": "https://github.com/eliduty/plugin/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eliduty/vite-plugin-iconfont.git"
+    "url": "git+https://github.com/eliduty/plugin.git"
   },
   "license": "MIT",
   "author": {
@@ -20,11 +20,6 @@
       "name": "eliduty",
       "email": "eliduty@qq.com",
       "url": "https://github.com/eliduty"
-    },
-    {
-      "name": "BWrong",
-      "email": "ibwrong@foxmail.com",
-      "url": "https://github.com/BWrong"
     }
   ],
   "type": "module",
@@ -42,37 +37,39 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "rimraf dist/*",
-    "build": "tsup src/index.ts --dts --format cjs,esm",
-    "dev": "pnpm build --watch src",
-    "example:build": "pnpm -C example build",
-    "example:dev": "pnpm -C example dev",
+    "postinstall": "simple-git-hooks",
+    "build": "pnpm -r --filter=./packages/* run build",
+    "taze": "taze minor -Ir",
+    "typecheck": "tsc --noEmit",
+    "release:pkg": "pnpm -r --filter=./packages/* run release",
     "release": "release-it",
-    "taze": "taze minor -Ir"
-  },
-  "dependencies": {
-    "@eliduty/type": "^1.0.3",
-    "x2js": "^3.4.4"
+    "dev:vite": "pnpm --filter @example/vite dev",
+    "dev": "vitest",
+    "test": "vitest run",
+    "lint": "eslint --cache .",
+    "lint:fix": "pnpm lint --fix",
+    "format": "prettier --write ."
   },
   "devDependencies": {
-    "@types/node": "^20.8.7",
-    "release-it": "^16.2.1",
-    "rimraf": "^5.0.5",
-    "taze": "^0.11.4",
-    "tsup": "^7.2.0",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0"
+    "@eliduty/eslint-config": "^1.0.35",
+    "@eliduty/prettier-config": "^1.0.20",
+    "@eliduty/tsconfig": "^1.0.22",
+    "@release-it/conventional-changelog": "^8.0.1",
+    "chalk": "^5.3.0",
+    "eslint": "^8.56.0",
+    "jsdom": "^23.2.0",
+    "msw": "^2.0.14",
+    "nano-staged": "^0.8.0",
+    "npm-run-all": "^4.1.5",
+    "pnpm": "^8.14.1",
+    "prettier": "^3.2.2",
+    "release-it": "^17.0.1",
+    "simple-git-hooks": "^2.9.0",
+    "taze": "^0.13.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "unbuild": "^2.0.0",
+    "vitest": "^1.2.0"
   },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release v${version}",
-      "requireCleanWorkingDir": false
-    },
-    "github": {
-      "release": false
-    },
-    "hooks": {
-      "before:init": "pnpm build"
-    }
-  }
+  "packageManager": "pnpm@8.14.1"
 }
