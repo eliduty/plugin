@@ -20,6 +20,9 @@ importers:
       '@release-it/conventional-changelog':
         specifier: ^8.0.1
         version: 8.0.1(release-it@17.0.3)
+      '@types/node':
+        specifier: ^20.11.13
+        version: 20.11.13
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -62,6 +65,9 @@ importers:
       unbuild:
         specifier: ^2.0.0
         version: 2.0.0(typescript@5.3.3)
+      vite-plugin-iconfont:
+        specifier: workspace:^
+        version: link:packages/vite-plugin-iconfont
       vitest:
         specifier: ^1.2.2
         version: 1.2.2(@types/node@20.11.13)(jsdom@24.0.0)
@@ -105,6 +111,10 @@ importers:
       x2js:
         specifier: ^3.4.4
         version: 3.4.4
+    devDependencies:
+      vite:
+        specifier: ^5.0.12
+        version: 5.0.12(@types/node@20.11.13)
 
 packages:
 
@@ -4779,6 +4789,7 @@ packages:
 
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+    requiresBuild: true
     dev: true
 
   /js-yaml@4.1.0:
@@ -5404,12 +5415,6 @@ packages:
     hasBin: true
     dependencies:
       picocolors: 1.0.0
-    dev: true
-
-  /nanoid@3.3.6:
-    resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
     dev: true
 
   /nanoid@3.3.7:
@@ -6384,7 +6389,7 @@ packages:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
-      nanoid: 3.3.6
+      nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true

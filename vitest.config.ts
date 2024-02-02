@@ -4,8 +4,7 @@ const r = (p: string) => resolve(__dirname, p);
 
 const alias = {
   '@': r('./'),
-  '@eliduty/type': r('packages/type/src'),
-  '@eliduty/request': r('packages/request/src')
+  'vite-plugin-iconfont': r('packages/vite-plugin-iconfont/src')
 };
 
 export default defineConfig({
@@ -13,7 +12,6 @@ export default defineConfig({
     alias
   },
   test: {
-    // setupFiles: ['./mocks/setup.ts'],
-    environment: 'jsdom'
+    setupFiles: ['./mocks/setup.ts']
   }
 });

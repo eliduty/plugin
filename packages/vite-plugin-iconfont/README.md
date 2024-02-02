@@ -165,5 +165,5 @@ Iconfont({
 ```
 
 4. 重启或者重载一下编辑器窗口（cmd+shift+p，然后Reload window）即可成功预览图标，效果如下。
-![预览](https://raw.githubusercontent.com/eliduty/vite-plugin-iconfont/main/img/iconify_preview.png)
-![自动补全](https://raw.githubusercontent.com/eliduty/vite-plugin-iconfont/main/img/iconify_completion.png)
+![预览](https://github.com/eliduty/plugin/blob/main/packages/vite-plugin-iconfont/img/iconify_preview.png?raw=true)
+![自动补全](https://github.com/eliduty/plugin/blob/main/packages/vite-plugin-iconfont/img/iconify_completion.png?raw=true)

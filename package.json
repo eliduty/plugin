@@ -43,7 +43,8 @@
     "typecheck": "tsc --noEmit",
     "release:pkg": "pnpm -r --filter=./packages/* run release",
     "release": "release-it",
-    "dev:vite": "pnpm --filter @example/vite dev",
+    "dev:example": "pnpm --F example dev",
+    "build:example": "pnpm --F example build-only",
     "dev": "vitest",
     "test": "vitest run",
     "lint": "eslint --cache .",
@@ -55,6 +56,7 @@
     "@eliduty/prettier-config": "^1.0.22",
     "@eliduty/tsconfig": "^1.1.2",
     "@release-it/conventional-changelog": "^8.0.1",
+    "@types/node": "^20.11.13",
     "chalk": "^5.3.0",
     "eslint": "^8.56.0",
     "jsdom": "^24.0.0",
@@ -69,6 +71,7 @@
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "unbuild": "^2.0.0",
+    "vite-plugin-iconfont": "workspace:^",
     "vitest": "^1.2.2"
   },
   "packageManager": "pnpm@8.15.1"
