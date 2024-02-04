@@ -9,6 +9,7 @@
 - 自动生成iconfont TypeScript类型声明文件。
 - 支持构建时自动注入index.html。
 - 支持生成iconify文件，配合[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)可实现图标预览和自动补全
+- 多图标库支持，自定义图标打包
 
 ## 安装
 
@@ -113,6 +114,22 @@ iconifyjson文件生成的路径，不设置则不生成。
 
 - **Type :** `string`
 - **Default :** ``
+- **Required :**`false`
+
+### jsSharking
+
+开启图标库的treeSharing优化,`inject:true`时有效。
+
+- **Type :** `boolean`
+- **Default :** `true`
+- **Required :**`false`
+
+### pickIconList
+
+需要提取的图标列表，不设置则提取所有图标。
+
+- **Type :** `string[]`
+- **Default :** `[]`
 - **Required :**`false`
 
 ## 示例

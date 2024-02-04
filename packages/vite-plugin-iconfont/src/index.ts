@@ -58,7 +58,7 @@ interface ExtendOption extends Option {
 
 export const defaultOptions: Option = {
   url: '',
-  distUrl: 'iconfont.js',
+  distUrl: '',
   inject: true,
   dts: false,
   iconJson: false,
@@ -93,7 +93,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
     iconList.push(JS_CONTENT.match(matchIconRegExp) ?? []);
     // 生成下载图标配置
     if (opt.iconJson) {
-      const iconJsonPath = opt.iconJson !== true ? opt.iconJson : index ? `iconfont${index}` : 'iconfont.json';
+      const iconJsonPath = opt.iconJson !== true ? opt.iconJson : index ? `iconfont${index}.json` : 'iconfont.json';
       JSON_CONTENT = opt?.pickIconList?.length ? getSharkingJson(JSON_CONTENT, opt?.pickIconList) : JSON_CONTENT;
       generateFile(iconJsonPath, JSON_CONTENT);
     }
@@ -103,7 +103,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
       const iconList = JS_CONTENT.match(matchIconRegExp) ?? [];
       const dtsPath = opt.dts !== true ? opt.dts : index ? `iconfont${index}.d.ts` : 'iconfont.d.ts';
       const iconDts = `declare type Iconfont = "${iconList.join('"|"')}"`;
-      generateFile(dtsPath as string, iconDts);
+      generateFile(dtsPath, iconDts);
     }
 
     // 生成iconify.json
@@ -114,14 +114,16 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
       const iconfontSymbols = iconfontObj?.svg?.symbol || [];
       const iconifyJson = createIconifyJson(iconfontSymbols, opt.prefix!, opt.prefixDelimiter);
       const iconifyJsonString = JSON.stringify(iconifyJson);
-      const iconifyPath = opt.iconifyFile !== true ? opt.iconifyFile : index ? `iconfont${index}.d.ts` : 'iconfont.d.ts';
+      const iconifyPath = opt.iconifyFile !== true ? opt.iconifyFile : index ? `iconfont${index}.iconify.json` : 'iconfont.iconify.json';
       generateFile(iconifyPath, iconifyJsonString);
     }
+
     // 自动下载iconfont symbol js
-    if (!opt.inject && opt.distUrl) {
+    if (!opt.inject) {
       // 不自动注入 iconfont js，打包指定icon
       JS_CONTENT = opt?.pickIconList?.length ? getSharkingJs(JS_CONTENT, opt?.pickIconList) : JS_CONTENT;
-      generateFile(getDistPath(opt.distUrl), JS_CONTENT);
+      const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
+      generateFile(getDistPath(distUrl), JS_CONTENT);
     }
   });
 
@@ -134,12 +136,13 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
       config = resolvedConfig;
       const IS_DEV = config.mode === 'development';
 
-      options.forEach(opt => {
+      options.forEach((opt, index) => {
         let JS_URL = opt.url;
         // 非开发环境使用本地地址
         if (!IS_DEV) {
           const { assetsDir } = config.build;
-          JS_URL = join(config.base, assetsDir, opt.distUrl || '')
+          const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
+          JS_URL = join(config.base, assetsDir, distUrl || '')
             .split('\\')
             .join('/');
         }
@@ -164,10 +167,12 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
     generateBundle: () => {
       options.forEach((opt, index) => {
         if (opt.inject) {
+          const { outDir, assetsDir } = config.build;
+
           const JS_CONTENT = opt.pickIconList?.length ? getSharkingJs(urlContent[opt.url], opt.pickIconList) : opt.jsSharking ? getSharkingJs(urlContent[opt.url], packIconList[index]) : urlContent[opt.url];
-          // TODO: 配置是否需要做TreeSharking、或者TreeShaking指定的图标集合、本地路径
+          const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
           // 匹配使用的到icon
-          const distPath = getDistPath(opt.distUrl as string);
+          const distPath = getDistPath(join(config.base, outDir, assetsDir, distUrl));
           generateFile(distPath, JS_CONTENT);
         }
       });
