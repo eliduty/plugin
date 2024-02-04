@@ -1,11 +1,10 @@
 import { join } from 'node:path';
 import { type IndexHtmlTransformResult, type Plugin } from 'vite';
 import X2JS from 'x2js';
+import { matchIconRegExp } from './config';
 import { generateFile, getDistPath, getSharkingJs, getSharkingJson, getUrlsContent, mergeOption, validate } from './helper';
 import { createIconifyJson } from './iconify';
 import type { Option } from './type';
-
-export const matchIconRegExp = /(?<=id=").+?(?=")/g;
 
 export default async (opt: Option | Option[]): Promise<Plugin> => {
   const options = mergeOption(opt);
