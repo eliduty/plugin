@@ -1,5 +1,5 @@
 import { existsSync, promises as fs } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
 import { parse } from 'node:url';
 import { DEFAULT_PROTOCOL, defaultOptions } from './config';
 import type { ExtendOption, Option } from './type';
@@ -151,9 +151,9 @@ export function getSharkingJson(jsonString: string, iconList: string[]) {
 }
 
 /**
- * 获取输出到本地的路径
+ * 规范化路径
  * @param path
  */
-export function getDistPath(path: string) {
-  return join(process.cwd(), path).split('\\').join('/');
+export function normalizePath(path: string) {
+  return path.split('\\').join('/');
 }

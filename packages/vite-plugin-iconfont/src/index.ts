@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { type IndexHtmlTransformResult, type Plugin } from 'vite';
 import X2JS from 'x2js';
 import { matchIconRegExp } from './config';
-import { generateFile, getDistPath, getSharkingJs, getSharkingJson, getUrlsContent, mergeOption, validate } from './helper';
+import { generateFile, getSharkingJs, getSharkingJson, getUrlsContent, mergeOption, normalizePath, validate } from './helper';
 import { createIconifyJson } from './iconify';
 import type { Option } from './type';
 
@@ -60,7 +60,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
       // 不自动注入 iconfont js，打包指定icon
       JS_CONTENT = opt?.pickIconList?.length ? getSharkingJs(JS_CONTENT, opt?.pickIconList) : JS_CONTENT;
       const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
-      generateFile(getDistPath(distUrl), JS_CONTENT);
+      generateFile(normalizePath(distUrl), JS_CONTENT);
     }
   });
 
@@ -109,7 +109,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
           const JS_CONTENT = opt.pickIconList?.length ? getSharkingJs(urlContent[opt.url], opt.pickIconList) : opt.jsSharking ? getSharkingJs(urlContent[opt.url], packIconList[index]) : urlContent[opt.url];
           const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
           // 匹配使用的到icon
-          const distPath = getDistPath(join(config.base, outDir, assetsDir, distUrl));
+          const distPath = normalizePath(join(outDir, config.base, assetsDir, distUrl));
           generateFile(distPath, JS_CONTENT);
         }
       });
