@@ -83,11 +83,12 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
             .split('\\')
             .join('/');
         }
-        injectArr.push({
-          tag: 'script',
-          injectTo: 'head',
-          attrs: { src: JS_URL }
-        });
+        opt.inject &&
+          injectArr.push({
+            tag: 'script',
+            injectTo: 'head',
+            attrs: { src: JS_URL }
+          });
       });
     },
     transformIndexHtml: () => injectArr,
