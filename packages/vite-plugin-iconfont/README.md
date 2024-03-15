@@ -118,7 +118,7 @@ iconifyjson文件生成的路径，不设置则不生成。
 
 ### jsSharking
 
-开启图标库的treeSharing优化,`inject:true`时有效。
+开启图标库的treeSharking优化,`inject:true`时有效。
 
 - **Type :** `boolean`
 - **Default :** `true`

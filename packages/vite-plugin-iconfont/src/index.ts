@@ -48,7 +48,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
       const parser = new X2JS();
       const iconXML = JS_CONTENT.match(/<svg>.*<\/svg>/i) + '';
       const iconfontObj: any = parser.xml2js(iconXML) || {};
-      const iconfontSymbols = iconfontObj?.svg?.symbol || [];
+      const iconfontSymbols = iconfontObj?.svg?.symbol ? (Array.isArray(iconfontObj?.svg?.symbol) ? iconfontObj?.svg?.symbol : [iconfontObj?.svg?.symbol]) : [];
       const iconifyJson = createIconifyJson(iconfontSymbols, opt.prefix!, opt.prefixDelimiter);
       const iconifyJsonString = JSON.stringify(iconifyJson);
       const iconifyPath = opt.iconifyFile !== true ? opt.iconifyFile : index ? `iconfont${index}.iconify.json` : 'iconfont.iconify.json';
