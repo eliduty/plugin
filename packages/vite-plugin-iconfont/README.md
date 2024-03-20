@@ -8,8 +8,8 @@
 - 自动生成iconfont json配置。
 - 自动生成iconfont TypeScript类型声明文件。
 - 支持构建时自动注入index.html。
-- 支持生成iconify文件，配合[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)可实现图标预览和自动补全
-- 多图标库支持，自定义图标打包
+- 支持生成iconify文件，配合[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)可实现图标预览和自动补全。
+- 多图标库支持，自定义图标打包。
 
 ## 安装
 
@@ -21,9 +21,11 @@ yarn add -D vite-plugin-iconfont
 pnpm install -D vite-plugin-iconfont
 ```
 
-## 使用方法
+## 基本使用方法
 
 添加插件到`vite.config.js`
+
+- 单图标库
 
 ```js
 import { defineConfig } from 'vite';
@@ -31,15 +33,87 @@ import Iconfont from 'vite-plugin-iconfont';
 export default defineConfig({
   plugins: [
     Iconfont({
-      url: '//at.alicdn.com/t/c/font_3303_220hwi541tl8.js'
+      url: 'iconfont symbol js url'
     })
+  ]
+});
+```
+
+- 多图标库
+
+```js
+import { defineConfig } from 'vite';
+import Iconfont from 'vite-plugin-iconfont';
+export default defineConfig({
+  plugins: [
+    Iconfont([{
+      url: 'iconfont symbol js url1'
+    },
+    {
+      url: 'iconfont symbol js url2'
+    },
+    //...another options
+    ])
   ]
 });
 ```
 
 ## 配置选项(options)
 
-### url
+### 类型说明
+
+```ts
+Iconfont(opt: Option | Option[]) => Promise<Plugin>;
+```
+
+```ts
+interface Option {
+    /**
+     * iconfont symbol js url
+     */
+    url: string;
+    /**
+     * 保存自动下载iconfont symbol js的路径
+     */
+    distUrl?: string;
+    /**
+     * iconfont symbol js是否自动注入到index.html
+     */
+    inject?: boolean;
+    /**
+     * 是否生成icon类型声明文件，可以为boolean或者具体生成的路径
+     */
+    dts?: boolean | string;
+    /**
+     * 自动生成iconfont图标集合
+     */
+    iconJson?: boolean | string;
+    /**
+     * 图标前缀, 默认icon
+     */
+    prefix?: string;
+    /**
+     * 图标前缀中的分隔符，默认为-
+     */
+    prefixDelimiter?: string;
+    /**
+     * iconifyjson文件生成的路径
+     */
+    iconifyFile?: boolean | string;
+    /**
+     * 是否进行摇树优化
+     */
+    jsSharking?: boolean;
+    /**
+     * 指定图标集合进行打包
+     */
+    pickIconList?: string[];
+}
+```
+
+### 详细说明
+
+#### url
 
 iconfont使用symbol引用方式，生成的项目js地址，该参数为主要输入参数。
 
@@ -47,7 +121,7 @@ iconfont使用symbol引用方式，生成的项目js地址，该参数为主要�
 - **Default :** ''
 - **Required :**`true`
 
-### distUrl
+#### distUrl
 
 保存iconfont到项目的js地址。
 
@@ -55,7 +129,7 @@ iconfont使用symbol引用方式，生成的项目js地址，该参数为主要�
 - **Default :** `iconfont.js`
 - **Required :**`false`
 
-### iconJson
+#### iconJson
 
 生成iconfont json配置路径，默认文件名称：`iconfont.json` 。
 
@@ -63,7 +137,7 @@ iconfont使用symbol引用方式，生成的项目js地址，该参数为主要�
 - **Default :** `false`
 - **Required :**`false`
 
-### inject
+#### inject
 
 iconfont symbol js是否自动注入到`index.html`文件。
 当`inject:false`时，不进行图标TreeSharking优化，并须配置distUrl和手动将文件路径注入到index.html文件中。
@@ -74,7 +148,7 @@ iconfont symbol js是否自动注入到`index.html`文件。
 - **Default :** `true`
 - **Required :**`false`
 
-### dts
+#### dts
 
 生成TypeScript 类型声明文件,`false`不生成，也可以是具体生成类型声明文件的文件路径地址，默认文件名称：`iconfont.d.ts`。
 
@@ -93,7 +167,7 @@ iconfont symbol js是否自动注入到`index.html`文件。
 }
 ```
 
-### prefix
+#### prefix
 
 图标前缀，iconfont默认为`icon`。
 
@@ -103,7 +177,7 @@ iconfont symbol js是否自动注入到`index.html`文件。
 - **Default :** `icon`
 - **Required :**`false`
 
-### prefixDelimiter
+#### prefixDelimiter
 
 图标前缀中的分隔符，默认为-
 
@@ -111,7 +185,7 @@ iconfont symbol js是否自动注入到`index.html`文件。
 - **Default :** `-`
 - **Required :**`false`
 
-### iconifyFile
+#### iconifyFile
 
 iconifyjson文件生成的路径，不设置则不生成。
 
@@ -119,7 +193,7 @@ iconifyjson文件生成的路径，不设置则不生成。
 - **Default :** ``
 - **Required :**`false`
 
-### jsSharking
+#### jsSharking
 
 开启图标库的treeSharking优化,`inject:true`时有效。
 
@@ -127,7 +201,7 @@ iconifyjson文件生成的路径，不设置则不生成。
 - **Default :** `true`
 - **Required :**`false`
 
-### pickIconList
+#### pickIconList
 
 需要提取的图标列表，不设置则提取所有图标。
 
@@ -147,7 +221,7 @@ export default () => {
     plugins: [
       vue(),
       Iconfont({
-        url: '//at.alicdn.com/t/c/font_3303_220hwi541tl8.js',
+        url: 'iconfont symbol js url',
         distUrl: './public/assets/fonts/iconfont.js',
         iconJson: './public/iconfont.json',
         dts: './types/iconfont.d.ts',
@@ -165,24 +239,24 @@ export default () => {
 
 1. 设置对应参数，如：
 
-```js
-Iconfont({
-  url: '你的iconfont项目地址', // 替换成你自己的iconfont项目地址
-  distUrl: './public/iconfont/iconfont.js',
-  prefix: 'icon-', // 默认为icon-，可不设置
-  iconifyFile: './.iconify.json' // 关键是设置这个
-}),
-```
+  ```js
+    Iconfont({
+      url: 'iconfont symbol js url', // 替换成你自己的iconfont项目地址
+      distUrl: './public/iconfont/iconfont.js',
+      prefix: 'icon-', // 默认为icon-，可不设置
+      iconifyFile: './.iconify.json' // 关键是设置这个
+    }),
+  ```
 
-2. 安装vscode插件[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)
+2. 安装vscode插件[Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)。
 
-3. 在项目vscode配置`.vscode/settings.json`中增加配置
+3. 在项目vscode配置`.vscode/settings.json`中增加配置。
 
-```json
-{
-  "iconify.customCollectionJsonPaths": ["./.iconify.json"]
-}
-```
+  ```json
+  {
+    "iconify.customCollectionJsonPaths": ["./.iconify.json"]
+  }
+  ```
 
 4. 重启或者重载一下编辑器窗口（cmd+shift+p，然后Reload window）即可成功预览图标，效果如下。
 ![预览](https://github.com/eliduty/plugin/blob/main/packages/vite-plugin-iconfont/img/iconify_preview.png?raw=true)
