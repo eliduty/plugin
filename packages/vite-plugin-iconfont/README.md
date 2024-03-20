@@ -65,7 +65,10 @@ iconfont使用symbol引用方式，生成的项目js地址，该参数为主要�
 
 ### inject
 
-iconfont symbol js是否自动注入到`index.html`文件，为false时不进行TreeSharking优化。
+iconfont symbol js是否自动注入到`index.html`文件。
+当`inject:false`时，不进行图标TreeSharking优化，并须配置distUrl和手动将文件路径注入到index.html文件中。
+当`inject:true`时，构建时将进行图标TreeSharking优化，distUrl将受vite的`base`和`build.assetsDir`配置影响，并自动注入到`index.html`文件。
+最佳实践建议：当`inject:true`时，可不配置distUrl参数，采用插件内置规则自动注入。
 
 - **Type :** `boolean`
 - **Default :** `true`
