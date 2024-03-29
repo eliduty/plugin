@@ -1,0 +1,54 @@
+{
+  "name": "vite-plugin-config-html",
+  "version": "1.0.0",
+  "description": "This plugin helps us configure html script,meta,link etc.",
+  "keywords": [
+    "vite-plugin",
+    "html"
+  ],
+  "homepage": "https://github.com/eliduty/plugin/blob/main/packages/vite-plugin-config-html/README.md",
+  "bugs": {
+    "url": "https://github.com/eliduty/plugin/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliduty/plugin.git",
+    "directory": "packages/vite-plugin-config-html"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "eliduty",
+    "email": "eliduty@qq.com"
+  },
+  "contributors": [
+    {
+      "name": "eliduty",
+      "email": "eliduty@qq.com",
+      "url": "https://github.com/eliduty"
+    }
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "release": "release-it"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.12"
+  }
+}
