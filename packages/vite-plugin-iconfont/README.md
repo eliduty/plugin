@@ -4,7 +4,7 @@
 
 这是一个自动下载iconfont symbol js到项目的vite 插件，支持以下特性：
 
-- 自动下载iconfont symbol js 到本地，构建时进行TreeSharking优化。
+- 自动下载iconfont symbol js 到本地，构建时进行Tree-Shaking优化。
 - 自动生成iconfont json配置。
 - 自动生成iconfont TypeScript类型声明文件。
 - 支持构建时自动注入index.html。
@@ -103,7 +103,7 @@ interface Option {
     /**
      * 是否进行摇树优化
      */
-    jsSharking?: boolean;
+    jsShaking?: boolean;
     /**
      * 指定图标集合进行打包
      */
@@ -141,9 +141,9 @@ iconfont使用symbol引用方式，生成的项目js地址，该参数为主要�
 
 iconfont symbol js是否自动注入到`index.html`文件。
 
-当`inject:false`时，不进行图标TreeSharking优化，并须配置distUrl和手动将文件路径注入到index.html文件中。
+当`inject:false`时，不进行图标Tree-Shaking优化，并须配置distUrl和手动将文件路径注入到index.html文件中。
 
-当`inject:true`时，构建时将进行图标TreeSharking优化，distUrl将受vite的`base`和`build.assetsDir`配置影响，并自动注入到`index.html`文件。
+当`inject:true`时，构建时将进行图标Tree-Shaking优化，distUrl将受vite的`base`和`build.assetsDir`配置影响，并自动注入到`index.html`文件。
 
 最佳实践建议：当`inject:true`时，可不配置distUrl参数，采用插件内置规则自动注入。
 
@@ -196,9 +196,9 @@ iconifyjson文件生成的路径，不设置则不生成。
 - **Default :** ``
 - **Required :**`false`
 
-#### jsSharking
+#### jsShaking
 
-开启图标库的treeSharking优化,`inject:true`时有效。
+开启图标库的tree-Shaking优化,`inject:true`时有效。
 
 - **Type :** `boolean`
 - **Default :** `true`

@@ -10,7 +10,7 @@ export const defaultOptions: Option = {
   iconJson: false,
   prefix: 'icon',
   prefixDelimiter: '-',
-  jsSharking: true
+  jsShaking: true
 };
 /**
  * iconfont使用的是相对协议，如果没有指定协议默认使用https

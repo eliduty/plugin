@@ -130,7 +130,7 @@ export async function getUrlsContent(urls: string[]) {
  * @param iconList
  * @returns
  */
-export function getSharkingJs(svgIconString: string, iconList: string[]) {
+export function getShakingJs(svgIconString: string, iconList: string[]) {
   const reg = new RegExp(`<symbol\\s+(?=[^>]*id="(${iconList.join('|')})")[^>]*>[\\s\\S]*?<\\/symbol>`, 'g');
   const res = svgIconString.match(reg);
   // 如果匹配到有内容就，使用过滤后的内容
@@ -144,7 +144,7 @@ export function getSharkingJs(svgIconString: string, iconList: string[]) {
  * @param iconList
  * @returns
  */
-export function getSharkingJson(jsonString: string, iconList: string[]) {
+export function getShakingJson(jsonString: string, iconList: string[]) {
   const data = JSON.parse(jsonString);
   data.glyphs = data.glyphs?.filter((item: { name: string }) => iconList.includes(`${data.css_prefix_text}${item.name}`));
   return JSON.stringify(data);

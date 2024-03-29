@@ -35,7 +35,7 @@ export interface Option {
   /**
    * 是否进行摇树优化
    */
-  jsSharking?: boolean;
+  jsShaking?: boolean;
   /**
    * 指定图标集合进行打包
    */

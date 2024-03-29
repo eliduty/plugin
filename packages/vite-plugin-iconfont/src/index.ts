@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { type IndexHtmlTransformResult, type Plugin } from 'vite';
 import X2JS from 'x2js';
 import { matchIconRegExp } from './config';
-import { generateFile, getSharkingJs, getSharkingJson, getUrlsContent, mergeOption, normalizePath, validate } from './helper';
+import { generateFile, getShakingJs, getShakingJson, getUrlsContent, mergeOption, normalizePath, validate } from './helper';
 import { createIconifyJson } from './iconify';
 import type { Option } from './type';
 
@@ -31,7 +31,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
     // 生成下载图标配置
     if (opt.iconJson) {
       const iconJsonPath = opt.iconJson !== true ? opt.iconJson : index ? `iconfont${index}.json` : 'iconfont.json';
-      JSON_CONTENT = opt?.pickIconList?.length ? getSharkingJson(JSON_CONTENT, opt?.pickIconList) : JSON_CONTENT;
+      JSON_CONTENT = opt?.pickIconList?.length ? getShakingJson(JSON_CONTENT, opt?.pickIconList) : JSON_CONTENT;
       generateFile(iconJsonPath, JSON_CONTENT);
     }
 
@@ -58,7 +58,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
     // 自动下载iconfont symbol js
     if (!opt.inject) {
       // 不自动注入 iconfont js，打包指定icon
-      JS_CONTENT = opt?.pickIconList?.length ? getSharkingJs(JS_CONTENT, opt?.pickIconList) : JS_CONTENT;
+      JS_CONTENT = opt?.pickIconList?.length ? getShakingJs(JS_CONTENT, opt?.pickIconList) : JS_CONTENT;
       const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
       generateFile(normalizePath(distUrl), JS_CONTENT);
     }
@@ -107,7 +107,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
         if (opt.inject) {
           const { outDir, assetsDir } = config.build;
 
-          const JS_CONTENT = opt.pickIconList?.length ? getSharkingJs(urlContent[opt.url], opt.pickIconList) : opt.jsSharking ? getSharkingJs(urlContent[opt.url], packIconList[index]) : urlContent[opt.url];
+          const JS_CONTENT = opt.pickIconList?.length ? getShakingJs(urlContent[opt.url], opt.pickIconList) : opt.jsShaking ? getShakingJs(urlContent[opt.url], packIconList[index]) : urlContent[opt.url];
           const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
           // 匹配使用的到icon
           const distPath = normalizePath(join(outDir, config.base, assetsDir, distUrl));
