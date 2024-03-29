@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-iconfont",
-  "version": "1.3.4",
+  "version": "1.4.0",
   "description": "This plugin is for auto download iconfont symbol js file",
   "keywords": [
     "vite-plugin",
