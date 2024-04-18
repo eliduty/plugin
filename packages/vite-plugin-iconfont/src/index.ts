@@ -107,7 +107,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
         if (opt.inject) {
           const { outDir, assetsDir } = config.build;
 
-          const JS_CONTENT = opt.pickIconList?.length ? getShakingJs(urlContent[opt.url], opt.pickIconList) : opt.jsShaking ? getShakingJs(urlContent[opt.url], packIconList[index]) : urlContent[opt.url];
+          const JS_CONTENT = opt.pickIconList?.length ? getShakingJs(urlContent[opt.url], opt.pickIconList) : opt.jsShaking && packIconList[index]?.length ? getShakingJs(urlContent[opt.url], packIconList[index]) : urlContent[opt.url];
           const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
           // 匹配使用的到icon
           const distPath = normalizePath(join(outDir, config.base, assetsDir, distUrl));
