@@ -10,6 +10,9 @@ export default {
       submit: true
     }
   },
+  npm: {
+    skipChecks: true
+  },
   plugins: {
     '@release-it/conventional-changelog': {
       infile: 'docs/CHANGELOG.md',

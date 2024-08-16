@@ -9,5 +9,8 @@ export default {
   },
   hooks: {
     'before:init': 'pnpm build'
+  },
+  npm: {
+    skipChecks: true
   }
 };
