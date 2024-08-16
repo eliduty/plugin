@@ -2,11 +2,13 @@
   "name": "vite-plugin-iconfont",
   "version": "1.4.1",
   "description": "This plugin is for auto download iconfont symbol js file",
+  "type": "module",
   "keywords": [
     "vite-plugin",
     "iconfont",
     "iconify"
   ],
+  "license": "MIT",
   "homepage": "https://github.com/eliduty/plugin/blob/main/packages/vite-plugin-iconfont/README.md",
   "bugs": {
     "url": "https://github.com/eliduty/plugin/issues"
@@ -16,7 +18,6 @@
     "url": "git+https://github.com/eliduty/plugin.git",
     "directory": "packages/vite-plugin-iconfont"
   },
-  "license": "MIT",
   "author": {
     "name": "eliduty",
     "email": "eliduty@qq.com"
@@ -33,31 +34,30 @@
       "url": "https://github.com/BWrong"
     }
   ],
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./*": "./*"
-  },
-  "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
   "files": [
     "dist/*"
   ],
-  "scripts": {
-    "build": "unbuild",
-    "release": "release-it"
-  },
-  "dependencies": {
-    "x2js": "^3.4.4"
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    },
+    "./*": "./*"
   },
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "build": "unbuild",
+    "release": "release-it"
+  },
   "peerDependencies": {
     "vite": "^5.0.12"
+  },
+  "dependencies": {
+    "x2js": "^3.4.4"
   }
 }

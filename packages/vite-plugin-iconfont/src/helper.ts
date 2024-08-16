@@ -1,6 +1,6 @@
 import { existsSync, promises as fs } from 'node:fs';
 import { dirname } from 'node:path';
-import { parse } from 'node:url';
+import { URL } from 'node:url';
 import { DEFAULT_PROTOCOL, defaultOptions } from './config';
 import type { ExtendOption, Option } from './type';
 
@@ -24,7 +24,11 @@ export function mergeOption(option: Option | Option[]) {
     throw new Error(`【vite-plugin-iconfont】 unsupported parameter type`);
   }
   const optionList = Array.isArray(option) ? option : [option];
-  const res: ExtendOption[] = optionList.map(item => ({ ...defaultOptions, ...item, jsonUrl: item?.url?.replace('.js', '.json') }));
+  const res: ExtendOption[] = optionList.map(item => ({
+    ...defaultOptions,
+    ...item,
+    jsonUrl: item?.url?.replace('.js', '.json')
+  }));
   return res;
 }
 
@@ -52,8 +56,11 @@ export function getURL(url: string) {
  * @returns
  */
 export function getProtocolType(url: string) {
-  const { protocol } = parse(url);
-  return protocol || DEFAULT_PROTOCOL;
+  const reg = /^(http|https)/;
+  if (!reg.test(url)) return DEFAULT_PROTOCOL;
+
+  const { protocol } = new URL(url);
+  return protocol.slice(0, -1) || DEFAULT_PROTOCOL;
 }
 
 /**
@@ -66,7 +73,7 @@ export async function getHttpClient(url: string) {
   let http;
   try {
     http = protocolType === DEFAULT_PROTOCOL ? await import('https') : await import('http');
-  } catch (err) {
+  } catch {
     // eslint-disable-next-line no-console
     console.log('get http(s) client error!');
   }
@@ -119,7 +126,7 @@ export async function writeFile(filePath: string, content = '') {
  * @param urls url列表
  * @returns
  */
-export async function getUrlsContent(urls: string[]) {
+export function getUrlsContent(urls: string[]) {
   const request = urls.map(getURLContent);
   return Promise.all(request);
 }
@@ -131,10 +138,17 @@ export async function getUrlsContent(urls: string[]) {
  * @returns
  */
 export function getShakingJs(svgIconString: string, iconList: string[] = []) {
-  const reg = new RegExp(`<symbol\\s+(?=[^>]*id="(${iconList.join('|')})")[^>]*>[\\s\\S]*?<\\/symbol>`, 'g');
+  const reg = new RegExp(
+    `<symbol\\s+(?=[^>]*id="(${iconList.join('|')})")[^>]*>[\\s\\S]*?<\\/symbol>`,
+    'g'
+  );
   const res = svgIconString.match(reg);
   // 如果匹配到有内容就，使用过滤后的内容
-  res?.length && (svgIconString = svgIconString.replace(/<svg\b[^>]*>(.*?)<\/svg>/gi, `<svg>${res?.join('')}</svg>`));
+  res?.length &&
+    (svgIconString = svgIconString.replace(
+      /<svg\b[^>]*>(.*?)<\/svg>/gi,
+      `<svg>${res?.join('')}</svg>`
+    ));
   return svgIconString;
 }
 
@@ -146,7 +160,9 @@ export function getShakingJs(svgIconString: string, iconList: string[] = []) {
  */
 export function getShakingJson(jsonString: string, iconList: string[] = []) {
   const data = JSON.parse(jsonString);
-  data.glyphs = data.glyphs?.filter((item: { name: string }) => iconList.includes(`${data.css_prefix_text}${item.name}`));
+  data.glyphs = data.glyphs?.filter((item: { name: string }) =>
+    iconList.includes(`${data.css_prefix_text}${item.name}`)
+  );
   return JSON.stringify(data);
 }
 
