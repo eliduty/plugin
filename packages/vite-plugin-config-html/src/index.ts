@@ -1,23 +1,23 @@
 import type { HtmlTagDescriptor, Plugin } from 'vite';
-export interface IHTMLTag {
+export interface HTMLTag {
   [key: string]: string | boolean;
 }
-HTMLScriptElement;
+
 export type ScriptTag = Record<string, string | boolean> | string;
 export interface Options {
-  favicon: string;
-  title: string;
-  metas: IHTMLTag[];
-  links: IHTMLTag[];
-  style: string;
-  headScripts: ScriptTag[];
-  scripts: ScriptTag[];
-  preHeadScripts: ScriptTag[];
+  favicon?: string;
+  title?: string;
+  metas?: HTMLTag[];
+  links?: HTMLTag[];
+  style?: string;
+  headScripts?: ScriptTag[];
+  scripts?: ScriptTag[];
+  preHeadScripts?: ScriptTag[];
 }
-export default function HtmlPlugin(rawOptions: Partial<Options>): Plugin {
+export default function configHtml(rawOptions: Options): Plugin {
   const { favicon, title, headScripts = [], metas = [], links = [], style, scripts = [], preHeadScripts = [] } = rawOptions;
 
-  const getScriptContent = (script: ScriptTag, injectTo: HtmlTagDescriptor['injectTo']) => {
+  const getScriptContent = (script: ScriptTag, injectTo: 'head' | 'body' | 'head-prepend' | 'body-prepend') => {
     let result = {} as HtmlTagDescriptor;
     if (typeof script === 'object' && script.src) {
       result = {
@@ -44,7 +44,7 @@ export default function HtmlPlugin(rawOptions: Partial<Options>): Plugin {
   };
 
   return {
-    name: 'html-plugin',
+    name: 'vite-plugin-config-html',
     transformIndexHtml: {
       order: 'pre',
       handler: (html: string) => {
