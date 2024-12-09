@@ -55,7 +55,7 @@
     "release": "release-it"
   },
   "peerDependencies": {
-    "vite": "^5.0.12"
+    "vite": ">=5.0.0"
   },
   "dependencies": {
     "x2js": "^3.4.4"

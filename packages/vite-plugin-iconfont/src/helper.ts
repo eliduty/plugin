@@ -68,7 +68,9 @@ export function getProtocolType(url: string) {
  * @param protocolType
  * @returns
  */
-export async function getHttpClient(url: string) {
+export async function getHttpClient(
+  url: string
+): Promise<typeof import('http') | typeof import('https') | undefined> {
   const protocolType = getProtocolType(url);
   let http;
   try {
