@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-config-html",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This plugin helps us configure html script,meta,link etc.",
   "type": "module",
   "keywords": [
