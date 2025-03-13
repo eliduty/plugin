@@ -94,7 +94,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
     name: 'vite-plugin-iconfont',
     configResolved(resolvedConfig) {
       config = resolvedConfig;
-      const IS_DEV = config.mode === 'development';
+      const IS_DEV = config.command === "serve";
 
       options.forEach((opt, index) => {
         let JS_URL = opt.url;
@@ -139,7 +139,7 @@ export default async (opt: Option | Option[]): Promise<Plugin> => {
               : urlContent[opt.url];
           const distUrl = opt.distUrl ? opt.distUrl : index ? `iconfont${index}.js` : 'iconfont.js';
           // 匹配使用的到icon
-          const distPath = normalizePath(join(outDir, config.base, assetsDir, distUrl));
+          const distPath = normalizePath(join(outDir, assetsDir, distUrl));
           generateFile(distPath, JS_CONTENT);
         }
       });
