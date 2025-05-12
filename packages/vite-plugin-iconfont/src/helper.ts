@@ -107,8 +107,6 @@ export async function getURLContent(url: string): Promise<string> {
         res.on('end', () => resolve(data));
       })
       .on('error', err => {
-        console.error('vite-plugin-iconfont:',err);
-
         reject(err);
       });
   });
