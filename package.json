@@ -1,7 +1,7 @@
 {
   "name": "@eliduty/plugin",
   "version": "1.2.4",
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.10.0",
   "description": "插件库",
   "type": "module",
   "license": "MIT",
@@ -53,10 +53,10 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "@eliduty/eslint-config": "^3.0.1",
+    "@eliduty/eslint-config": "^3.1.0",
     "@eliduty/prettier-config": "^1.0.24",
-    "@eliduty/tsconfig": "^1.2.4",
-    "@release-it/conventional-changelog": "^9.0.4",
+    "@eliduty/tsconfig": "^1.2.5",
+    "@release-it/conventional-changelog": "^10.0.1",
     "@types/node": "^22.15.17",
     "chalk": "^5.4.1",
     "eslint": "^9.26.0",
@@ -64,15 +64,15 @@
     "msw": "^2.8.2",
     "nano-staged": "^0.8.0",
     "npm-run-all": "^4.1.5",
-    "pnpm": "^9.15.9",
+    "pnpm": "^10.10.0",
     "prettier": "^3.5.3",
-    "release-it": "^17.11.0",
+    "release-it": "^19.0.2",
     "simple-git-hooks": "^2.13.0",
     "taze": "^19.1.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "unbuild": "^3.5.0",
+    "unbuild": "^2.0.0",
     "vite-plugin-iconfont": "workspace:^",
-    "vitest": "^2.1.9"
+    "vitest": "^3.1.3"
   }
 }
